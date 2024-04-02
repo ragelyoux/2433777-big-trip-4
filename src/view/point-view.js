@@ -2,19 +2,23 @@ import {createElement} from '../render.js';
 import {createPointTemplate} from '../template/point-template.js';
 
 export default class PointView {
-  constructor() {
-    this._element = null;
+  constructor({point}) {
+    this.point = point;
   }
 
-  _getTemplate() {
-    return createPointTemplate();
+  getTemplate() {
+    return createPointTemplate(this.point);
   }
 
   getElement() {
-    if (!this._element) {
-      this._element = createElement(this._getTemplate());
+    if(!this.element) {
+      this.element = createElement(this.getTemplate());
     }
 
-    return this._element;
+    return this.element;
+  }
+
+  removeElement() {
+    this.element = null;
   }
 }
