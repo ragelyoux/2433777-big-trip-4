@@ -1,19 +1,33 @@
 import {createElement} from '../render.js';
 import {createPointEditTemplate} from '../template/point-edit-template.js';
 
+const DEFAULT_POINT = {
+  id: null,
+  type: null,
+  price: null,
+  date: null,
+  destination: null,
+  offer: null,
+  isFavorite: false,
+};
+
 export default class PointEditView {
-  constructor() {
-    this._element = null;
+  constructor({point = DEFAULT_POINT}) {
+    this.point = point;
   }
 
-  _getTemplate() {
-    return createPointEditTemplate();
+  getTemplate() {
+    return createPointEditTemplate(this.point);
   }
 
   getElement() {
-    if (!this._element) {
-      this._element = createElement(this._getTemplate());
+    if(!this.element) {
+      this.element = createElement(this.getTemplate());
     }
-    return this._element;
+    return this.element;
+  }
+
+  removeElement() {
+    this.element = null;
   }
 }

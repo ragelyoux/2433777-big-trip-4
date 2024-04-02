@@ -1,40 +1,29 @@
+import { render, RenderPosition } from '../render.js';
 import EventListView from '../view/event-list-view.js';
-import SortView from '../view/sort-view.js';
-import PointView from '../view/point-view.js';
+import FilterView from '../view/filter-view';
 import PointEditView from '../view/point-edit-view.js';
-import {render} from '../render.js';
+import PointView from '../view/point-view.js';
+import SortView from '../view/sort-view.js';
+import TripInfoView from '../view/trip-info-view';
 
-const POINT_COUNT = 3;
-
-export default class Presenter {
-  constructor({ container }) {
-    this.container = container;
-    this.sortView = new SortView();
-    this.eventListView = new EventListView();
+export default class BoardPresenter {
+  constructor({ containers, pointsModel }) {
+    this.containers = containers;
+    this.pointsModel = pointsModel;
+    this.eventList = new EventListView();
   }
 
   init() {
-    this.renderSortView();
-    this.renderEventListView();
-    this.renderPointEditView();
-    this.renderPointViews();
-  }
+    this.tripPoints = [...this.pointsModel.getPoints()];
 
-  renderSortView() {
-    render(this.sortView, this.container);
-  }
+    render(new TripInfoView(), this.containers.tripInfo, RenderPosition.AFTERBEGIN);
+    render(new FilterView(), this.containers.filter);
+    render(new SortView(), this.containers.event);
+    render(this.eventList, this.containers.event);
+    render(new PointEditView({ point: this.tripPoints[0] }), this.eventList.getElement());
 
-  renderEventListView() {
-    render(this.eventListView, this.container);
-  }
-
-  renderPointEditView() {
-    render(new PointEditView(), this.eventListView.getElement());
-  }
-
-  renderPointViews() {
-    for (let i = 0; i < POINT_COUNT; i++) {
-      render(new PointView(), this.eventListView.getElement());
+    for (let i = 1; i < this.tripPoints.length; i++) {
+      render(new PointView({ point: this.tripPoints[i] }), this.eventList.getElement());
     }
   }
 }
