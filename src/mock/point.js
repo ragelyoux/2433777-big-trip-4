@@ -1,23 +1,21 @@
-import { TRANSPORT_TYPES, PRICES, DESTINATIONS, TIMETABLE, EXTRAS } from '../constants';
-import { getRandomArrayElement } from '../utilities';
-import { generateMockDestination } from './destination';
+import { TRANSPORT_TYPES, PRICES, CITIES, DATE_TIMES, OFFERS } from '../constants';
+import { getRandomArrayElement } from '../utils';
+import { getMockDestination } from './destination';
 
-const BOUND = 4;
+const NUMBER = 3;
 
-function getRandomPoint() {
-  const identity = Math.floor(Math.random() * DESTINATIONS.length);
-  const offerCount = Math.floor(Math.random() * BOUND + 1);
-  const offers = Array.from({ length: offerCount }, () => getRandomArrayElement(EXTRAS));
-
+function generateRandomPoint() {
+  const id = Math.floor(Math.random() * CITIES.size);
+  const offerCount = Math.floor(Math.random() * NUMBER + 1);
   return {
-    id: identity,
+    id,
     type: getRandomArrayElement(TRANSPORT_TYPES),
     price: getRandomArrayElement(PRICES),
-    date: getRandomArrayElement(TIMETABLE),
-    destination: generateMockDestination(identity),
-    offer: offers,
+    date: getRandomArrayElement(DATE_TIMES),
+    destination: getMockDestination(id),
+    offer: Array.from({ length: offerCount }, () => getRandomArrayElement(OFFERS)),
     isFavorite: Math.floor(Math.random() * 2)
   };
 }
 
-export { getRandomPoint };
+export { generateRandomPoint };

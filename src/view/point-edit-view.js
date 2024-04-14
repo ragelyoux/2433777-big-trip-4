@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view';
 import {createPointEditTemplate} from '../template/point-edit-template.js';
 
 const DEFAULT_POINT = {
@@ -11,23 +11,31 @@ const DEFAULT_POINT = {
   isFavorite: false,
 };
 
-export default class PointEditView {
-  constructor({point = DEFAULT_POINT}) {
-    this.point = point;
+export default class PointEditView extends AbstractView {
+  #point;
+  #onPointEditReset;
+  #onPointEditSubmit;
+
+  constructor({point = DEFAULT_POINT, onPointEditReset, onPointEditSubmit}) {
+    super();
+    this.#point = point;
+    this.#onPointEditReset = onPointEditReset;
+    this.#onPointEditSubmit = onPointEditSubmit;
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#pointEditResetHandler);
+    this.element.querySelector('form').addEventListener('submit', this.#pointEditSubmitHandler);
   }
 
-  getTemplate() {
-    return createPointEditTemplate(this.point);
-  }
+  #pointEditResetHandler = (evt) => {
+    evt.preventDefault();
+    this.#onPointEditReset();
+  };
 
-  getElement() {
-    if(!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-    return this.element;
-  }
+  #pointEditSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#onPointEditSubmit();
+  };
 
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createPointEditTemplate(this.#point);
   }
 }

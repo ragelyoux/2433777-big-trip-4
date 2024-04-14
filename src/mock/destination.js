@@ -1,15 +1,19 @@
-import { DESTINATIONS, DESCRIPTIONS } from '../constants';
+import { CITIES, DESCRIPTIONS } from '../constants';
 
 const IMAGE_COUNT = 5;
-const RANDOM_BOUND = 20;
+const NUMBER = 100;
 
-function generateMockDestination(id) {
+function generateRandomImageUrl() {
+  return `https://loremflickr.com/248/152?random=${Math.floor(Math.random() * NUMBER)}`;
+}
+
+function getMockDestination(identity) {
   return {
-    id: id,
-    city: DESTINATIONS.get(id),
-    description: DESCRIPTIONS.get(id),
-    images: Array.from({ length: IMAGE_COUNT }, () => `https://loremflickr.com/248/152?random=${Math.floor(Math.random() * RANDOM_BOUND)}`)
+    id: identity,
+    city: CITIES.get(identity),
+    description: DESCRIPTIONS.get(identity),
+    img: Array.from({ length: IMAGE_COUNT }, generateRandomImageUrl)
   };
 }
 
-export { generateMockDestination };
+export { getMockDestination };

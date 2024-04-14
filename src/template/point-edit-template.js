@@ -1,37 +1,38 @@
 import dayjs from 'dayjs';
 
 function createPointEditOfferTemplate(offer) {
-  if (offer) {
+  if (offer !== null) {
     return (
       `<section class="event__section  event__section--offers">
-                <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-                <div class="event__available-offers">
-                    ${offer.map(([title, price]) => `<div class="event__offer-selector">
-                        <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-                        <label class="event__offer-label" for="event-offer-train-1">
-                            <span class="event__offer-title">${title}</span>
-                                &plus;&euro;&nbsp;
-                            <span class="event__offer-price">${price}</span>
-                        </label>
-                    </div>`).join('')}
-                </div>
-            </section>`
-    );
+        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+          <div class="event__available-offers">
+            ${offer.reduce((acc, [title, price]) => (`${acc}<div class="event__offer-selector">
+              <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train" checked>
+              <label class="event__offer-label" for="event-offer-train-1">
+                <span class="event__offer-title">${title}</span>
+                  &plus;&euro;&nbsp;
+                <span class="event__offer-price">${price}</span>
+              </label>
+            </div>`), '')}
+          </div>
+        </section>
+      `);
+  } else {
+    return '';
   }
-  return '';
 }
 
 function createPointEditPhotoTemplate(img) {
-  if (img) {
+  if (img !== null) {
     return (
       `<div class="event__photos-container">
-                <div class="event__photos-tape">
-                    ${img.map((path) => `<img class="event__photo" src="${path}" alt="Event photo">`)}
-                </div>
-            </div>`
-    );
+        <div class="event__photos-tape">
+          ${img.map((path) => `<img class="event__photo" src="${path}" alt="Event photo">`)}
+        </div>
+      </div>`);
+  } else {
+    return '';
   }
-  return '';
 }
 
 function createPointEditTemplate(point) {
