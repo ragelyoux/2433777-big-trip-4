@@ -1,67 +1,76 @@
-import { render, RenderPosition, replace } from '../framework/render';
-import TripInfoView from '../view/trip-info-view';
-import FilterView from '../view/filter-view';
-import SortView from '../view/sort-view';
-import EventListView from '../view/event-list-view.js';
-import PointView from '../view/point-view.js';
-import PointEditView from '../view/point-edit-view.js';
+import { render, RenderPosition } from '../framework/render.js';
+import SortView from '../view/sort-view.js';
+import TripInfoView from '../view/trip-info-view.js';
+import NoPointView from '../view/no-point-view.js';
+import PointPresenter from './point-presenter.js';
+import { updateItem } from '../utils.js';
 
-export default class Presenter {
-  #eventList = new EventListView();
-  #containers;
-  #pointsModel;
-  #tripPoints;
 
-  constructor({ containers, pointsModel }) {
-    this.#containers = containers;
+export default class TripPresenter {
+  #tripContainer = null;
+  #pointsModel = null;
+  #tripPoints = [];
+
+  #pointsList = new TripInfoView();
+  #sortComponent = new SortView();
+  #noTaskComponent = new NoPointView();
+
+  #pointPresenter = new Map();
+
+  constructor(tripContainer, pointsModel) {
+    this.#tripContainer = tripContainer;
     this.#pointsModel = pointsModel;
   }
 
   init() {
-    this.#tripPoints = [...this.#pointsModel.points];
+    this.#tripPoints = [...this.#pointsModel.point];
 
-    render(new TripInfoView(), this.#containers.tripInfo, RenderPosition.AFTERBEGIN);
-    render(new FilterView(), this.#containers.filter);
-    render(new SortView(), this.#containers.event);
-    render(this.#eventList, this.#containers.event);
-    this.#tripPoints.forEach((point) => this.#renderPoint(point));
+    if (this.#tripPoints.length === 0) {
+      this.#renderNoPoints();
+    }
+    else {
+      this.#renderSort();
+      this.#renderPointList();
+    }
   }
 
-  #renderPoint(point) {
-    const pointComponent = new PointView({
-      point,
-      onEditClick,
-    });
+  #renderSort = () => {
+    render(this.#sortComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
+  };
 
-    const pointEditComponent = new PointEditView({
-      point,
-      onPointEditReset,
-      onPointEditSubmit,
-    });
+  #renderNoPoints = () => {
+    render(this.#noTaskComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
+  };
 
-    const escKeydown = (evt) => {
-      if (evt.keyCode === 27) {
-        evt.preventDefault();
-        replace(pointComponent, pointEditComponent);
-        document.removeEventListener('keydown', escKeydown);
-      }
-    };
+  #renderPoints = (from, to) => {
+    this.#tripPoints
+      .slice(from, to)
+      .forEach((point) => this.#renderPoint(point));
+  };
 
-    function onEditClick() {
-      replace(pointEditComponent, pointComponent);
-      document.addEventListener('keydown', escKeydown);
-    }
+  #renderPointList = () => {
+    render(this.#pointsList, this.#tripContainer);
+    this.#renderPoints(0, this.#tripPoints.length);
+  };
 
-    function onPointEditSubmit() {
-      replace(pointComponent, pointEditComponent);
-      document.removeEventListener('keydown', escKeydown);
-    }
+  #renderPoint = (point) => {
+    const pointPresenter = new PointPresenter(this.#pointsList.element, this.#handlePointChange, this.#handleModeChange);
+    pointPresenter.init(point);
+    this.#pointPresenter.set(point.id, pointPresenter);
+  };
 
-    function onPointEditReset() {
-      replace(pointComponent, pointEditComponent);
-      document.removeEventListener('keydown', escKeydown);
-    }
+  #clearEventsList = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.destroy());
+    this.#pointPresenter.clear();
+  };
 
-    render(pointComponent, this.#eventList.element);
-  }
+  #handlePointChange = (updatedPoint) => {
+    this.#tripPoints = updateItem(this.#tripPoints, updatedPoint);
+    this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
+  };
+
+  #handleModeChange = () => {
+    this.#pointPresenter.forEach((presenter) => presenter.resetView());
+  };
+
 }

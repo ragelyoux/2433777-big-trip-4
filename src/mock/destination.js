@@ -1,19 +1,38 @@
-import { CITIES, DESCRIPTIONS } from '../constants';
+import { nanoid } from 'nanoid';
+import { getRandomArrayElement, getRandomPositiveInteger,generateRandomDates } from '../utils.js';
+import { POINT_TYPES, DESCRIPTIONS, DESTINATIONS, tripPrices, prices, OFFERS } from './constants';
 
-const IMAGE_COUNT = 5;
-const NUMBER = 100;
 
-function generateRandomImageUrl() {
-  return `https://loremflickr.com/248/152?random=${Math.floor(Math.random() * NUMBER)}`;
-}
+const generatePicture = () => ({
+  src: `http://picsum.photos/248/152?r=${getRandomPositiveInteger(0, 10)}`,
+  description: getRandomArrayElement(DESCRIPTIONS),
+});
 
-function getMockDestination(identity) {
+const generateOffer = (id) => ({
+  id,
+  title: getRandomArrayElement(OFFERS),
+  price: getRandomPositiveInteger(prices.MIN, prices.MAX)
+});
+
+const generateDestination = (id) => ({
+  id,
+  description: getRandomArrayElement(DESCRIPTIONS),
+  name: getRandomArrayElement(DESTINATIONS),
+  pictures: Array.from({ length: 4 }, generatePicture)
+});
+
+const generatePoint = () => {
+  const randomDates = generateRandomDates();
   return {
-    id: identity,
-    city: CITIES.get(identity),
-    description: DESCRIPTIONS.get(identity),
-    img: Array.from({ length: IMAGE_COUNT }, generateRandomImageUrl)
+    basePrice: getRandomPositiveInteger(tripPrices.MIN, tripPrices.MAX),
+    dateFrom: randomDates.dateFrom,
+    dateTo: randomDates.dateTo,
+    destination: generateDestination(),
+    id: nanoid(),
+    isFavorite: Boolean(getRandomPositiveInteger(0, 1)),
+    offers: generateOffer(),
+    type: getRandomArrayElement(POINT_TYPES)
   };
-}
+};
 
-export { getMockDestination };
+export { generatePoint };

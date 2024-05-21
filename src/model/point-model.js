@@ -1,11 +1,10 @@
-import {generateRandomPoint} from '../mock/point';
+import { generatePoint } from '../mock/destination';
 
-const POINT_COUNT = 5;
+export default class pointModel {
 
-export default class PointsModel {
-  #points = Array.from({length: POINT_COUNT}, generateRandomPoint);
+  #point = Array.from({ length: 10 }, generatePoint);
 
-  get points() {
-    return this.#points;
+  get point() {
+    return this.#point;
   }
 }
