@@ -1,15 +1,15 @@
+import { render } from './render.js';
+import { generateFilter } from './utils.js';
+import FilterView from './view/filter-view.js';
+import PointModel from './model/point-model.js';
 import Presenter from './presenter/presenter.js';
-import PointsModel from './model/point-model.js';
 
-const containers = {
-  tripInfo: document.querySelector('.trip-main'),
-  filter: document.querySelector('.trip-controls__filters'),
-  event: document.querySelector('.trip-events'),
-};
+const pointModel = new PointModel();
+const filter = generateFilter(pointModel.point);
+const headerElement = document.querySelector('.trip-main');
+const mainElement = document.querySelector('.page-main');
+const tripPresenter = new Presenter(mainElement.querySelector('.trip-events'), pointModel);
 
-const presenter = new Presenter({
-  containers,
-  pointsModel: new PointsModel()
-});
+render(new FilterView(filter), headerElement.querySelector('.trip-controls__filters'));
 
-presenter.init();
+tripPresenter.init();
