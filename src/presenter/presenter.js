@@ -1,15 +1,18 @@
-import { render, RenderPosition } from '../framework/render.js';
+import {render, RenderPosition} from '../framework/render.js';
 import SortView from '../view/sort-view.js';
 import TripInfoView from '../view/trip-info-view.js';
 import NoPointView from '../view/no-point-view.js';
 import PointPresenter from './point-presenter.js';
-import { updateItem } from '../utils.js';
-
+import {SortType} from '../mock/constants';
+import {sortPointsDayUp, sortPointsPriceUp, sortPointsTimeUp} from '../utils.js';
+import {updateItem} from '../utils.js';
 
 export default class TripPresenter {
   #tripContainer = null;
   #pointsModel = null;
   #tripPoints = [];
+  #boardPoints = [];
+  #currentSortType = [];
 
   #pointsList = new TripInfoView();
   #sortComponent = new SortView();
@@ -24,11 +27,11 @@ export default class TripPresenter {
 
   init() {
     this.#tripPoints = [...this.#pointsModel.point];
+    this.#boardPoints = [...this.#pointsModel.point];
 
     if (this.#tripPoints.length === 0) {
       this.#renderNoPoints();
-    }
-    else {
+    } else {
       this.#renderSort();
       this.#renderPointList();
     }
@@ -36,6 +39,7 @@ export default class TripPresenter {
 
   #renderSort = () => {
     render(this.#sortComponent, this.#tripContainer, RenderPosition.AFTERBEGIN);
+    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
   };
 
   #renderNoPoints = () => {
@@ -66,6 +70,7 @@ export default class TripPresenter {
 
   #handlePointChange = (updatedPoint) => {
     this.#tripPoints = updateItem(this.#tripPoints, updatedPoint);
+    this.#boardPoints = updateItem(this.#boardPoints, updatedPoint);
     this.#pointPresenter.get(updatedPoint.id).init(updatedPoint);
   };
 
@@ -73,4 +78,31 @@ export default class TripPresenter {
     this.#pointPresenter.forEach((presenter) => presenter.resetView());
   };
 
+  #sortPoints = (sortType) => {
+    switch (sortType) {
+      case SortType.DAY:
+        this.#tripPoints.sort(sortPointsDayUp);
+        break;
+      case SortType.TIME:
+        this.#tripPoints.sort(sortPointsTimeUp);
+        break;
+      case SortType.PRICE:
+        this.#tripPoints.sort(sortPointsPriceUp);
+        break;
+      default:
+        this.#tripPoints = [...this.#boardPoints];
+    }
+
+    this.#currentSortType = sortType;
+  };
+
+  #handleSortTypeChange = (sortType) => {
+    if (this.#currentSortType === sortType) {
+      return;
+    }
+
+    this.#sortPoints(sortType);
+    this.#clearEventsList();
+    this.#renderPointList();
+  };
 }
