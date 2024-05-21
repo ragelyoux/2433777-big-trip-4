@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { FilterType } from './mock/constants';
+import {FilterType} from './mock/constants';
 
 const getRandomPositiveInteger = (min, max) => {
   if (min < max) {
@@ -65,6 +65,17 @@ export const generateFilter = (points) => Object.entries(filter).map(
   })
 );
 
+const sortPointsDayUp = (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
+
+const sortPointsTimeUp = (pointA, pointB) => {
+  const timeA = dayjs(pointA.dateTo).diff(dayjs(pointA.dateFrom));
+  const timeB = dayjs(pointB.dateTo).diff(dayjs(pointB.dateFrom));
+
+  return timeA - timeB;
+};
+
+const sortPointsPriceUp = (pointA, pointB) => pointA.basePrice - pointB.basePrice;
+
 export {
   getRandomPositiveInteger,
   updateItem,
@@ -73,5 +84,8 @@ export {
   isEscKeyDown,
   isPointFuture,
   isPointPast,
+  sortPointsDayUp,
+  sortPointsTimeUp,
+  sortPointsPriceUp,
   filter
 };

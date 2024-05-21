@@ -13,6 +13,12 @@ const DESCRIPTIONS = [
   'Rome, the eternal city of Italy, is a treasure trove of ancient history, art, and culture.'
 ];
 
+const SortType = {
+  DAY: 'day',
+  TIME: 'time',
+  PRICE: 'price',
+};
+
 const prices = {
   MIN: 10,
   MAX: 100
@@ -29,4 +35,4 @@ const FilterType = {
   PAST: 'past'
 };
 
-export {OFFERS, POINT_TYPES, DESCRIPTIONS, DESTINATIONS, tripPrices, prices, FilterType};
+export {OFFERS, POINT_TYPES, DESCRIPTIONS, DESTINATIONS, SortType, tripPrices, prices, FilterType};
