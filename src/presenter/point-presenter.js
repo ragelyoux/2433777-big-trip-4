@@ -1,7 +1,7 @@
-import { render, replace, remove } from '../framework/render.js';
+import {render, replace, remove} from '../framework/render.js';
 import WaypointView from '../view/waypoint-view.js';
 import EditFormView from '../view/edit-form-view.js';
-import { isEscKeyDown } from '../utils.js';
+import {isEscKeyDown} from '../utils.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -20,20 +20,27 @@ export default class PointPresenter {
   #pointComponent = null;
   #pointEditComponent = null;
 
-  constructor(pointsListContainer, changeData, changeMode) {
+  #pointsModel = null;
+  #destinations = null;
+  #offers = null;
+
+  constructor(pointsListContainer, pointsModel, changeData, changeMode) {
     this.#pointsListContainer = pointsListContainer;
+    this.#pointsModel = pointsModel;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
   }
 
   init = (point) => {
     this.#point = point;
+    this.#destinations = [...this.#pointsModel.destinations];
+    this.#offers = [...this.#pointsModel.offers];
 
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
 
-    this.#pointComponent = new WaypointView(point);
-    this.#pointEditComponent = new EditFormView(point);
+    this.#pointComponent = new WaypointView(point, this.#destinations, this.#offers);
+    this.#pointEditComponent = new EditFormView(point, this.#destinations, this.#offers);
 
     this.#pointComponent.setEditClickHandler(this.#handleEditClick);
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
@@ -65,6 +72,7 @@ export default class PointPresenter {
 
   resetView = () => {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   };
@@ -83,30 +91,29 @@ export default class PointPresenter {
   };
 
   #onEscKeyDown = (evt) => {
-    if (isEscKeyDown) {
+    if (isEscKeyDown(evt)) {
       evt.preventDefault();
+      this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   };
 
   #handleEditClick = () => {
     this.#replacePointToForm();
-
   };
 
   #handleFormSubmit = (point) => {
     this.#changeData(point);
     this.#replaceFormToPoint();
-
   };
 
   #handleCloseClick = () => {
+    this.#pointEditComponent.reset(this.#point);
     this.#replaceFormToPoint();
-
   };
 
   #handleFavoriteClick = () => {
-    this.#changeData({ ...this.#point, isFavorite: !this.#point.isFavorite });
+    this.#changeData({...this.#point, isFavorite: !this.#point.isFavorite});
   };
 
 }
