@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {FilterType} from './mock/constants';
+import {FilterType, SortType} from './mock/constants';
 
 const getRandomPositiveInteger = (min, max) => {
   if (min < max) {
@@ -22,6 +22,7 @@ const updateItem = (items, update) => {
     ...items.slice(index + 1),
   ];
 };
+
 
 const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
 
@@ -58,13 +59,6 @@ const generateRandomDates = () => {
   };
 };
 
-export const generateFilter = (points) => Object.entries(filter).map(
-  ([filterName, filterPoints]) => ({
-    name: filterName,
-    count: filterPoints(points).length
-  })
-);
-
 const sortPointsDayUp = (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
 
 const sortPointsTimeUp = (pointA, pointB) => {
@@ -75,6 +69,21 @@ const sortPointsTimeUp = (pointA, pointB) => {
 };
 
 const sortPointsPriceUp = (pointA, pointB) => pointA.basePrice - pointB.basePrice;
+
+const sorting = {
+  [SortType.DAY]: (points) => points.sort(sortPointsDayUp),
+  [SortType.PRICE]: (points) => points.sort(sortPointsPriceUp),
+  [SortType.TIME]: (points) => points.sort(sortPointsTimeUp),
+};
+
+const getDateTime = (date) => dayjs(date).format('DD/MM/YY hh:mm');
+
+const generateFilter = (points) => Object.entries(filter).map(
+  ([filterName, filterPoints]) => ({
+    name: filterName,
+    count: filterPoints(points).length
+  })
+);
 
 export {
   getRandomPositiveInteger,
@@ -87,5 +96,8 @@ export {
   sortPointsDayUp,
   sortPointsTimeUp,
   sortPointsPriceUp,
+  getDateTime,
+  generateFilter,
+  sorting,
   filter
 };
