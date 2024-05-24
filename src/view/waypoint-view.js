@@ -14,7 +14,7 @@ const renderOffers = (allOffers, checkedOffers) => {
 const createWaypointTemplate = (point, destinations, offers) => {
   const { basePrice, type, destinationId, isFavorite, dateFrom, dateTo, offerIds } = point;
 
-  const offersByType = offers.find((offer) => offer.type === type);
+  const allPointTypeOffers = offers.find((offer) => offer.type === type);
 
   const getDate = (date) => dayjs(date).format('D MMMM');
   const getTime = (date) => dayjs(date).format('hh:mm');
@@ -39,7 +39,7 @@ const createWaypointTemplate = (point, destinations, offers) => {
       </p>
       <h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers">
-        ${renderOffers(offersByType.offers, offerIds)}
+        ${renderOffers(allPointTypeOffers.offers, offerIds)}
       </ul>
       <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
         <span class="visually-hidden">Add to favorite</span>

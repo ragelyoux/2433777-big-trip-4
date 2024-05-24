@@ -42,6 +42,5 @@ const FilterType = {
   PAST: 'past'
 };
 
-const maxPoints = 8;
 
-export {OFFERS, POINT_TYPES, DESCRIPTIONS, DESTINATIONS, SortType, tripPrices, prices, FilterType, picturesCount, maxPoints};
+export {OFFERS, POINT_TYPES, DESCRIPTIONS, DESTINATIONS, SortType, tripPrices, prices, FilterType, picturesCount};
