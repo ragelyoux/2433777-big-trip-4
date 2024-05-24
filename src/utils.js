@@ -85,6 +85,13 @@ const generateFilter = (points) => Object.entries(filter).map(
   })
 );
 
+const capitalizeFirstLetter = (string) => {
+  const firstChar = string[0].toUpperCase();
+  const remainingString = string.slice(1);
+  return firstChar + remainingString;
+};
+
+
 export {
   getRandomPositiveInteger,
   updateItem,
@@ -98,6 +105,7 @@ export {
   sortPointsPriceUp,
   getDateTime,
   generateFilter,
+  capitalizeFirstLetter,
   sorting,
   filter
 };
