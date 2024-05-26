@@ -2,12 +2,7 @@ import { render, replace, remove } from '../framework/render.js';
 import WaypointView from '../view/waypoint-view.js';
 import EditFormView from '../view/edit-form-view.js';
 import { isEscKeyDown } from '../utils.js';
-import { UpdateType, UserAction } from '../mock/constants.js';
-
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING'
-};
+import { Mode, UpdateType, UserAction } from '../mock/constants.js';
 
 export default class PointPresenter {
 
@@ -22,32 +17,35 @@ export default class PointPresenter {
   #pointEditComponent = null;
 
   #pointsModel = null;
+  #destinationsModel = null;
+  #offersModel = null;
+
   #destinations = null;
   #offers = null;
 
-  #isNewPoint = false;
-
-  constructor(pointsListContainer, pointsModel, changeData, changeMode) {
+  constructor(pointsListContainer, pointsModel, changeData, changeMode, destinationsModel, offersModel) {
     this.#pointsListContainer = pointsListContainer;
     this.#pointsModel = pointsModel;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
   }
 
   init = (point) => {
     this.#point = point;
-    this.#destinations = [...this.#pointsModel.destinations];
-    this.#offers = [...this.#pointsModel.offers];
+    this.#destinations = [...this.#destinationsModel.destinations];
+    this.#offers = [...this.#offersModel.offers];
 
     const prevPointComponent = this.#pointComponent;
     const prevPointEditComponent = this.#pointEditComponent;
 
     this.#pointComponent = new WaypointView(point, this.#destinations, this.#offers);
     this.#pointEditComponent = new EditFormView({
-      point: point,
+      point,
       destination: this.#destinations,
       offers: this.#offers,
-      isNewPoint: this.#isNewPoint
+      isNewPoint: false
     });
 
     this.#pointComponent.setEditClickHandler(this.#handleEditClick);
