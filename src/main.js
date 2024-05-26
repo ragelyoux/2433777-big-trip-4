@@ -4,13 +4,10 @@ import PointsModel from './model/point-model.js';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
 import NewPointButtonView from './view/new-point-button-view.js';
-import PointsApiService from './api.js'; //
+import PointsApiService from './api.js';
 import OffersModel from './model/offer-model.js';
 import DestinationsModel from './model/destination-model.js';
-
-
-const AUTHORIZATION = 'Basic cN5Fsq21pw0c4b7p'; //
-const END_POINT = 'https://21.objects.htmlacademy.pro/big-trip';
+import {END_POINT, AUTHORIZATION} from './mock/constants';
 
 const siteMainElement = document.querySelector('.page-main');
 const siteHeaderElement = document.querySelector('.trip-main');
