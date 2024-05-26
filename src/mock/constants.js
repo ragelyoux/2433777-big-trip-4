@@ -2,6 +2,9 @@ const OFFERS = ['Upgrade to a business class', 'Order Uber', 'Add lunch', 'Order
 
 const DESTINATIONS = ['Tokyo', 'Sydney', 'New York', 'London', 'Paris', 'Rome', 'Toronto', 'Washington'];
 
+const AUTHORIZATION = 'Basic cN5Fsq21pw0c4b7p';
+const END_POINT = 'https://21.objects.htmlacademy.pro/big-trip';
+
 const POINT_TYPES = {
   TAXI: 'taxi',
   BUS: 'bus',
@@ -70,6 +73,8 @@ const UserAction = {
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
 const Mode = {
@@ -77,4 +82,9 @@ const Mode = {
   EDITING: 'EDITING'
 };
 
-export { POINT_TYPES, OFFERS, DESCRIPTIONS, DESTINATIONS, tripPrices, prices, FilterType, SortType, picturesCount, maxPoints, UpdateType, UserAction, Method, Mode };
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
+
+export { POINT_TYPES, OFFERS, DESCRIPTIONS, DESTINATIONS, tripPrices, prices, FilterType, SortType, picturesCount, maxPoints, UpdateType, UserAction, Method, Mode, TimeLimit, AUTHORIZATION, END_POINT };
