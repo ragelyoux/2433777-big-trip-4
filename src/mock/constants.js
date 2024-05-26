@@ -42,5 +42,18 @@ const FilterType = {
   PAST: 'past'
 };
 
+const maxPoints = 8;
 
-export {OFFERS, POINT_TYPES, DESCRIPTIONS, DESTINATIONS, SortType, tripPrices, prices, FilterType, picturesCount};
+const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
+const UserAction = {
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  DELETE_POINT: 'DELETE_POINT',
+};
+
+export { POINT_TYPES, OFFERS, DESCRIPTIONS, DESTINATIONS, tripPrices, prices, FilterType, SortType, picturesCount, maxPoints, UpdateType, UserAction };

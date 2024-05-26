@@ -9,21 +9,6 @@ const getRandomPositiveInteger = (min, max) => {
   }
 };
 
-const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
-
-
 const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0, elements.length - 1)];
 
 const isEscKeyDown = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
@@ -85,16 +70,9 @@ const generateFilter = (points) => Object.entries(filter).map(
   })
 );
 
-const capitalizeFirstLetter = (string) => {
-  const firstChar = string[0].toUpperCase();
-  const remainingString = string.slice(1);
-  return firstChar + remainingString;
-};
-
 
 export {
   getRandomPositiveInteger,
-  updateItem,
   getRandomArrayElement,
   generateRandomDates,
   isEscKeyDown,
@@ -105,7 +83,6 @@ export {
   sortPointsPriceUp,
   getDateTime,
   generateFilter,
-  capitalizeFirstLetter,
   sorting,
   filter
 };
