@@ -4,7 +4,7 @@ import { isEscKeyDown } from '../utils.js';
 import { UpdateType, UserAction } from '../mock/constants.js';
 import { nanoid } from 'nanoid';
 
-export default class NewPointPresenter {
+export default class PointNewPresenter {
 
   #pointsListContainer = null;
   #changeData = null;
@@ -13,15 +13,18 @@ export default class NewPointPresenter {
   #pointEditComponent = null;
 
   #pointsModel = null;
+  #destinationsModel = null;
+  #offersModel = null;
+
   #destinations = null;
   #offers = null;
 
-  #isNewPoint = false;
-
-  constructor(pointsListContainer, changeData, pointsModel) {
+  constructor(pointsListContainer, changeData, pointsModel, destinationsModel, offersModel) {
     this.#pointsListContainer = pointsListContainer;
     this.#changeData = changeData;
     this.#pointsModel = pointsModel;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
   }
 
   init = (callback) => {
@@ -30,18 +33,17 @@ export default class NewPointPresenter {
       return;
     }
 
-    this.#destinations = [...this.#pointsModel.destinations];
-    this.#offers = [...this.#pointsModel.offers];
+    this.#destinations = [...this.#destinationsModel.destinations];
+    this.#offers = [...this.#offersModel.offers];
 
     this.#pointEditComponent = new EditFormView({
       destination: this.#destinations,
       offers: this.#offers,
-      isNewPoint: this.#isNewPoint
+      isNewPoint: true
     });
 
     this.#pointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#pointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
-    this.#pointEditComponent.setCloseClickHandler(this.#handleCloseClick);
 
     render(this.#pointEditComponent, this.#pointsListContainer, RenderPosition.AFTERBEGIN);
     document.addEventListener('keydown', this.#onEscKeyDown);
@@ -74,10 +76,6 @@ export default class NewPointPresenter {
   };
 
   #handleDeleteClick = () => {
-    this.destroy();
-  };
-
-  #handleCloseClick = () => {
     this.destroy();
   };
 }

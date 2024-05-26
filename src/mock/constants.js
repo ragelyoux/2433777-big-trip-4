@@ -2,7 +2,17 @@ const OFFERS = ['Upgrade to a business class', 'Order Uber', 'Add lunch', 'Order
 
 const DESTINATIONS = ['Tokyo', 'Sydney', 'New York', 'London', 'Paris', 'Rome', 'Toronto', 'Washington'];
 
-const POINT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+const POINT_TYPES = {
+  TAXI: 'taxi',
+  BUS: 'bus',
+  TRAIN: 'train',
+  SHIP: 'ship',
+  DRIVE: 'drive',
+  FLIGHT: 'flight',
+  CHECK_IN: 'check-in',
+  SIGHTSEEING: 'sightseeing',
+  RESTAURANT: 'restaurant'
+};
 
 const DESCRIPTIONS = [
   'Tokyo, the bustling capital of Japan, is a city known for its futuristic skyline, cutting-edge technology, and vibrant street life.',
@@ -48,6 +58,7 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 const UserAction = {
@@ -56,4 +67,14 @@ const UserAction = {
   DELETE_POINT: 'DELETE_POINT',
 };
 
-export { POINT_TYPES, OFFERS, DESCRIPTIONS, DESTINATIONS, tripPrices, prices, FilterType, SortType, picturesCount, maxPoints, UpdateType, UserAction };
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+};
+
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING'
+};
+
+export { POINT_TYPES, OFFERS, DESCRIPTIONS, DESTINATIONS, tripPrices, prices, FilterType, SortType, picturesCount, maxPoints, UpdateType, UserAction, Method, Mode };
