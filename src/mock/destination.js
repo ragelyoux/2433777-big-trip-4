@@ -8,6 +8,7 @@ import {
   prices,
   OFFERS,
   picturesCount,
+  maxPoints
 } from './constants';
 
 
@@ -37,25 +38,21 @@ const generateOffersByType = (pointType) => ({
 
 const getOffersByType = () => Array.from({length: POINT_TYPES.length}).map((value, index) => generateOffersByType(POINT_TYPES[index]));
 
-const offersByType = getOffersByType();
-const destinations = getDestinations();
-
 const generatePoint = () => {
   const randomDates = generateRandomDates();
-  const offersByTypePoint = getRandomArrayElement(offersByType);
-  const allOfferIdsByTypePoint = offersByTypePoint.offers.map((offer) => offer.id);
+  const offerIds = getRandomArrayElement(getOffersByType()).offers.map((offer) => offer.id);
   return {
     basePrice: getRandomPositiveInteger(tripPrices.MIN, tripPrices.MAX),
     dateFrom: randomDates.dateFrom,
     dateTo: randomDates.dateTo,
-    destinationId: getRandomArrayElement(destinations).id,
+    destinationId: getRandomArrayElement(getDestinations()).id,
     id: nanoid(),
     isFavorite: Boolean(getRandomPositiveInteger(0, 1)),
-    offerIds: Array.from({length: getRandomPositiveInteger(0, allOfferIdsByTypePoint.length)}).map(() => allOfferIdsByTypePoint[getRandomPositiveInteger(0, allOfferIdsByTypePoint.length - 1)]),
-    type: offersByTypePoint.type
+    offerIds: Array.from({length: getRandomPositiveInteger(0, offerIds.length)}).map(() => offerIds[getRandomPositiveInteger(0, offerIds.length - 1)]),
+    type: getRandomArrayElement(getOffersByType()).type
   };
 };
 
-const getPoints = () => Array.from({ length: 20 }).map(() => generatePoint()).sort();
+const getPoints = () => Array.from({length: maxPoints}).map(() => generatePoint()).sort();
 
 export {getPoints, getDestinations, getOffersByType};

@@ -1,7 +1,8 @@
-import {render, replace, remove} from '../framework/render.js';
+import { render, replace, remove } from '../framework/render.js';
 import WaypointView from '../view/waypoint-view.js';
 import EditFormView from '../view/edit-form-view.js';
-import {isEscKeyDown} from '../utils.js';
+import { isEscKeyDown } from '../utils.js';
+import { UpdateType, UserAction } from '../mock/constants.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -24,6 +25,8 @@ export default class PointPresenter {
   #destinations = null;
   #offers = null;
 
+  #isNewPoint = false;
+
   constructor(pointsListContainer, pointsModel, changeData, changeMode) {
     this.#pointsListContainer = pointsListContainer;
     this.#pointsModel = pointsModel;
@@ -40,13 +43,20 @@ export default class PointPresenter {
     const prevPointEditComponent = this.#pointEditComponent;
 
     this.#pointComponent = new WaypointView(point, this.#destinations, this.#offers);
-    this.#pointEditComponent = new EditFormView(point, this.#destinations, this.#offers);
+    this.#pointEditComponent = new EditFormView({
+      point: point,
+      destination: this.#destinations,
+      offers: this.#offers,
+      isNewPoint: this.#isNewPoint
+    });
 
     this.#pointComponent.setEditClickHandler(this.#handleEditClick);
     this.#pointComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
 
     this.#pointEditComponent.setFormSubmitHandler(this.#handleFormSubmit);
     this.#pointEditComponent.setCloseClickHandler(this.#handleCloseClick);
+
+    this.#pointEditComponent.setDeleteClickHandler(this.#handleDeleteClick);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(this.#pointComponent, this.#pointsListContainer);
@@ -93,8 +103,7 @@ export default class PointPresenter {
   #onEscKeyDown = (evt) => {
     if (isEscKeyDown(evt)) {
       evt.preventDefault();
-      this.#pointEditComponent.reset(this.#point);
-      this.#replaceFormToPoint();
+      this.resetView();
     }
   };
 
@@ -103,17 +112,32 @@ export default class PointPresenter {
   };
 
   #handleFormSubmit = (point) => {
-    this.#changeData(point);
+    this.#changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
     this.#replaceFormToPoint();
   };
 
   #handleCloseClick = () => {
-    this.#pointEditComponent.reset(this.#point);
-    this.#replaceFormToPoint();
+    this.resetView();
   };
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#point, isFavorite: !this.#point.isFavorite});
+    this.#changeData(
+      UserAction.UPDATE_POINT,
+      UpdateType.PATCH,
+      { ...this.#point, isFavorite: !this.#point.isFavorite },
+    );
+  };
+
+  #handleDeleteClick = (point) => {
+    this.#changeData(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
   };
 
 }
