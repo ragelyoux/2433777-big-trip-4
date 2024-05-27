@@ -1,6 +1,6 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {POINT_TYPES} from '../mock/constants.js';
-import {getDateTime} from '../utils.js';
+import { POINT_TYPES } from '../constants.js';
+import { formatDateTime } from '../utils.js';
 import dayjs from 'dayjs';
 import flatpickr from 'flatpickr';
 import he from 'he';
@@ -54,11 +54,11 @@ const renderOffers = (allOffers, checkedOffers, isDisabled) => {
 const renderDate = (dateFrom, dateTo, isDisabled) => (
   `<div class="event__field-group  event__field-group--time">
     <label class="visually-hidden" for="event-start-time-1">From</label>
-    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${getDateTime(dateFrom)}"
+    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDateTime(dateFrom)}"
     ${isDisabled ? 'disabled' : ''}>
     &mdash;
     <label class="visually-hidden" for="event-end-time-1">To</label>
-    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${getDateTime(dateTo)}"
+    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDateTime(dateTo)}"
     ${isDisabled ? 'disabled' : ''}>
   </div>`
 );
@@ -70,7 +70,7 @@ ${isDisabled ? 'disabled' : ''}>
 </div>`).join('');
 
 const createEditFormTemplate = (point, destinations, allOffers, isNewPoint) => {
-  const {basePrice, type, destination, dateFrom, dateTo, offers, isDisabled, isSaving, isDeleting} = point;
+  const { basePrice, type, destination, dateFrom, dateTo, offers, isDisabled, isSaving, isDeleting } = point;
   const offersByType = allOffers.find((offer) => offer.type === type);
   const currentDestination = destinations.find((item) => item.id === destination);
 
@@ -112,7 +112,7 @@ const createEditFormTemplate = (point, destinations, allOffers, isNewPoint) => {
 
       <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>${isSaving ? 'Saving...' : 'Save'}</button>
       ${isNewPoint ? `<button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>Cancel</button>` :
-    `<button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
+      `<button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${isDeleting ? 'Deleting...' : 'Delete'}</button>
        <button class="event__rollup-btn" type="button">`}
         <span class="visually-hidden">Open event</span>
       </button>
@@ -150,7 +150,7 @@ export default class EditFormView extends AbstractStatefulView {
 
   #datepicker = null;
 
-  constructor({point = BLANK_POINT, destination, offers, isNewPoint}) {
+  constructor({ point = BLANK_POINT, destination, offers, isNewPoint }) {
     super();
     this._state = EditFormView.parsePointToState(point);
     this.#destination = destination;
@@ -226,7 +226,8 @@ export default class EditFormView extends AbstractStatefulView {
     let currentOffers = [...this._state.offers];
     if (offers.length !== this._state.offers.length) {
       currentOffers = offers;
-    } else {
+    }
+    else {
       currentOffers.push(Number(evt.target.id.slice(-1)));
     }
     this._setState({
@@ -334,7 +335,7 @@ export default class EditFormView extends AbstractStatefulView {
   });
 
   static parseStateToPoint = (state) => {
-    const point = {...state};
+    const point = { ...state };
     delete point.isDisabled;
     delete point.isSaving;
     delete point.isDeleting;

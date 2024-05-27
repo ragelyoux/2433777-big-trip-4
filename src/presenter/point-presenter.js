@@ -1,13 +1,13 @@
-import {render, replace, remove} from '../framework/render.js';
+import { render, replace, remove } from '../framework/render.js';
 import WaypointView from '../view/waypoint-view.js';
 import EditFormView from '../view/edit-form-view.js';
-import {isEscKeyDown} from '../utils.js';
-import {Mode, UpdateType, UserAction} from '../mock/constants.js';
+import { isEscKey } from '../utils.js';
+import { FORM_MODES, UPDATE_TYPES, USER_ACTIONS } from '../constants.js';
 
 export default class PointPresenter {
 
   #point = null;
-  #mode = Mode.DEFAULT;
+  #mode = FORM_MODES.DEFAULT;
 
   #pointsListContainer = null;
   #changeData = null;
@@ -59,13 +59,13 @@ export default class PointPresenter {
       return;
     }
 
-    if (this.#mode === Mode.DEFAULT) {
+    if (this.#mode === FORM_MODES.DEFAULT) {
       replace(this.#pointComponent, prevPointComponent);
     }
 
-    if (this.#mode === Mode.EDITING) {
+    if (this.#mode === FORM_MODES.EDITING) {
       replace(this.#pointComponent, prevPointEditComponent);
-      this.#mode = Mode.DEFAULT;
+      this.#mode = FORM_MODES.DEFAULT;
     }
 
     remove(prevPointComponent);
@@ -78,14 +78,14 @@ export default class PointPresenter {
   };
 
   resetView = () => {
-    if (this.#mode !== Mode.DEFAULT) {
+    if (this.#mode !== FORM_MODES.DEFAULT) {
       this.#pointEditComponent.reset(this.#point);
       this.#replaceFormToPoint();
     }
   };
 
   setSaving = () => {
-    if (this.#mode === Mode.EDITING) {
+    if (this.#mode === FORM_MODES.EDITING) {
       this.#pointEditComponent.updateElement({
         isDisabled: true,
         isSaving: true,
@@ -94,7 +94,7 @@ export default class PointPresenter {
   };
 
   setDeleting = () => {
-    if (this.#mode === Mode.EDITING) {
+    if (this.#mode === FORM_MODES.EDITING) {
       this.#pointEditComponent.updateElement({
         isDisabled: true,
         isDeleting: true,
@@ -103,7 +103,7 @@ export default class PointPresenter {
   };
 
   setAborting = () => {
-    if (this.#mode === Mode.DEFAULT) {
+    if (this.#mode === FORM_MODES.DEFAULT) {
       this.#pointComponent.shake();
       return;
     }
@@ -122,18 +122,18 @@ export default class PointPresenter {
   #replacePointToForm = () => {
     replace(this.#pointEditComponent, this.#pointComponent);
     this.#changeMode();
-    this.#mode = Mode.EDITING;
+    this.#mode = FORM_MODES.EDITING;
     document.addEventListener('keydown', this.#onEscKeyDown);
   };
 
   #replaceFormToPoint = () => {
     replace(this.#pointComponent, this.#pointEditComponent);
-    this.#mode = Mode.DEFAULT;
+    this.#mode = FORM_MODES.DEFAULT;
     document.removeEventListener('keydown', this.#onEscKeyDown);
   };
 
   #onEscKeyDown = (evt) => {
-    if (isEscKeyDown(evt)) {
+    if (isEscKey(evt)) {
       evt.preventDefault();
       this.resetView();
     }
@@ -145,8 +145,8 @@ export default class PointPresenter {
 
   #handleFormSubmit = (point) => {
     this.#changeData(
-      UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
+      USER_ACTIONS.UPDATE_POINT,
+      UPDATE_TYPES.MINOR,
       point,
     );
   };
@@ -157,16 +157,16 @@ export default class PointPresenter {
 
   #handleFavoriteClick = () => {
     this.#changeData(
-      UserAction.UPDATE_POINT,
-      UpdateType.PATCH,
-      {...this.#point, isFavorite: !this.#point.isFavorite},
+      USER_ACTIONS.UPDATE_POINT,
+      UPDATE_TYPES.PATCH,
+      { ...this.#point, isFavorite: !this.#point.isFavorite },
     );
   };
 
   #handleDeleteClick = (point) => {
     this.#changeData(
-      UserAction.DELETE_POINT,
-      UpdateType.MINOR,
+      USER_ACTIONS.DELETE_POINT,
+      UPDATE_TYPES.MINOR,
       point,
     );
   };

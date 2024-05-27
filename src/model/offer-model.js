@@ -1,6 +1,6 @@
 import Observable from '../framework/observable.js';
 
-export default class OffersModel extends Observable {
+export default class OfferModel extends Observable {
   #offers = [];
   #offersApiService = null;
 
@@ -21,3 +21,4 @@ export default class OffersModel extends Observable {
     return this.#offers;
   }
 }
+

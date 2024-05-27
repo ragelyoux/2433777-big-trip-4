@@ -1,7 +1,7 @@
 import Observable from '../framework/observable.js';
-import { UpdateType } from '../mock/constants.js';
+import { UPDATE_TYPES } from '../constants.js';
 
-export default class pointsModel extends Observable {
+export default class pointModel extends Observable {
   #pointsApiService = null;
   #points = [];
 
@@ -18,7 +18,7 @@ export default class pointsModel extends Observable {
       this.#points = [];
     }
 
-    this._notify(UpdateType.INIT);
+    this._notify(UPDATE_TYPES.INIT);
 
   };
 

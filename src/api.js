@@ -1,7 +1,8 @@
+import { HTTP_METHODS } from './constants.js';
 import ApiService from './framework/api-service.js';
-import { Method } from './mock/constants.js';
 
-export default class PointsApiService extends ApiService {
+
+export default class Api extends ApiService {
   get points() {
     return this._load({ url: 'points' })
       .then(ApiService.parseResponse);
@@ -20,7 +21,7 @@ export default class PointsApiService extends ApiService {
   addPoint = async (point) => {
     const response = await this._load({
       url: 'points',
-      method: Method.POST,
+      method: HTTP_METHODS.POST,
       body: JSON.stringify(this.#adaptToServer(point)),
       headers: new Headers({ 'Content-Type': 'application/json' }),
     });
@@ -33,7 +34,7 @@ export default class PointsApiService extends ApiService {
   deletePoint = async (point) => {
     const response = await this._load({
       url: `points/${point.id}`,
-      method: Method.DELETE,
+      method: HTTP_METHODS.DELETE,
     });
 
     return response;
@@ -42,7 +43,7 @@ export default class PointsApiService extends ApiService {
   updatePoint = async (point) => {
     const response = await this._load({
       url: `points/${point.id}`,
-      method: Method.PUT,
+      method: HTTP_METHODS.PUT,
       body: JSON.stringify(this.#adaptToServer(point)),
       headers: new Headers({ 'Content-Type': 'application/json' }),
     });
