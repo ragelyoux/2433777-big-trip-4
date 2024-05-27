@@ -1,9 +1,9 @@
-import {render, remove, RenderPosition} from '../framework/render.js';
+import { render, remove, RenderPosition } from '../framework/render.js';
 import EditFormView from '../view/edit-form-view.js';
-import {isEscKeyDown} from '../utils.js';
-import {UpdateType, UserAction} from '../mock/constants.js';
+import { isEscKey } from '../utils.js';
+import { UPDATE_TYPES, USER_ACTIONS } from '../constants.js';
 
-export default class PointNewPresenter {
+export default class NewPointPresenter {
 
   #pointsListContainer = null;
   #changeData = null;
@@ -76,7 +76,7 @@ export default class PointNewPresenter {
   };
 
   #onEscKeyDown = (evt) => {
-    if (isEscKeyDown(evt)) {
+    if (isEscKey(evt)) {
       evt.preventDefault();
       this.destroy();
     }
@@ -84,8 +84,8 @@ export default class PointNewPresenter {
 
   #handleFormSubmit = (point) => {
     this.#changeData(
-      UserAction.ADD_POINT,
-      UpdateType.MINOR,
+      USER_ACTIONS.ADD_POINT,
+      UPDATE_TYPES.MINOR,
       point,
     );
   };

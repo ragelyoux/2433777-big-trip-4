@@ -1,31 +1,31 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { SortType } from '../mock/constants.js';
+import { SORT_TYPES } from '../constants.js';
 
 const createSortTemplate = (currentSortType) => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-    <div class="trip-sort__item  trip-sort__item--${SortType.DAY}">
-      <input ${currentSortType === SortType.DAY ? 'checked' : ''} id="sort-${SortType.DAY}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
-      value="sort-${SortType.DAY}" data-sort-type="${SortType.DAY}" checked>
-        <label class="trip-sort__btn" for="sort-${SortType.DAY}">Day</label>
+    <div class="trip-sort__item  trip-sort__item--${SORT_TYPES.DAY}">
+      <input ${currentSortType === SORT_TYPES.DAY ? 'checked' : ''} id="sort-${SORT_TYPES.DAY}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
+      value="sort-${SORT_TYPES.DAY}" data-sort-type="${SORT_TYPES.DAY}" checked>
+        <label class="trip-sort__btn" for="sort-${SORT_TYPES.DAY}">Day</label>
     </div>
     <div class="trip-sort__item  trip-sort__item--event">
-      <input ${currentSortType === SortType.EVENT ? 'checked' : ''} id="sort-${SortType.EVENT}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
-      value="sort-${SortType.EVENT}" data-sort-type=${SortType.EVENT} disabled>
+      <input ${currentSortType === SORT_TYPES.EVENT ? 'checked' : ''} id="sort-${SORT_TYPES.EVENT}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
+      value="sort-${SORT_TYPES.EVENT}" data-sort-type=${SORT_TYPES.EVENT} disabled>
         <label class="trip-sort__btn" for="sort-event">Event</label>
     </div>
-    <div class="trip-sort__item  trip-sort__item--${SortType.TIME}">
-      <input ${currentSortType === SortType.TIME ? 'checked' : ''} id="sort-${SortType.TIME}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
-      value="sort-${SortType.TIME}" data-sort-type="${SortType.TIME}">
-        <label class="trip-sort__btn" for="sort-${SortType.TIME}">Time</label>
+    <div class="trip-sort__item  trip-sort__item--${SORT_TYPES.TIME}">
+      <input ${currentSortType === SORT_TYPES.TIME ? 'checked' : ''} id="sort-${SORT_TYPES.TIME}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
+      value="sort-${SORT_TYPES.TIME}" data-sort-type="${SORT_TYPES.TIME}">
+        <label class="trip-sort__btn" for="sort-${SORT_TYPES.TIME}">Time</label>
     </div>
-    <div class="trip-sort__item  trip-sort__item--${SortType.PRICE}">
-      <input ${currentSortType === SortType.PRICE ? 'checked' : ''} id="sort-${SortType.PRICE}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
-      value="sort-${SortType.PRICE}" data-sort-type="${SortType.PRICE}">
-        <label class="trip-sort__btn" for="sort-${SortType.PRICE}">Price</label>
+    <div class="trip-sort__item  trip-sort__item--${SORT_TYPES.PRICE}">
+      <input ${currentSortType === SORT_TYPES.PRICE ? 'checked' : ''} id="sort-${SORT_TYPES.PRICE}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
+      value="sort-${SORT_TYPES.PRICE}" data-sort-type="${SORT_TYPES.PRICE}">
+        <label class="trip-sort__btn" for="sort-${SORT_TYPES.PRICE}">Price</label>
     </div>
     <div class="trip-sort__item  trip-sort__item--offer">
-      <input ${currentSortType === SortType.OFFER ? 'checked' : ''} id="sort-${SortType.OFFER}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
-      value="sort-${SortType.OFFER}" data-sort-type=${SortType.OFFER} disabled>
+      <input ${currentSortType === SORT_TYPES.OFFER ? 'checked' : ''} id="sort-${SORT_TYPES.OFFER}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort"
+      value="sort-${SORT_TYPES.OFFER}" data-sort-type=${SORT_TYPES.OFFER} disabled>
         <label class="trip-sort__btn" for="sort-offer">Offers</label>
     </div>
   </form>`
